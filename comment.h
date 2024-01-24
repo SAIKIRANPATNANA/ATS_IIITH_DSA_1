@@ -9,6 +9,6 @@ typedef struct comment{
     int num_lines;
 }comment;
 
-comment* createComment(comment** firstComment, char* username, char** content, int num_lines);
+comment* createComment(char* username, char** content);
 
 

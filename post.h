@@ -11,7 +11,7 @@ typedef struct post{
     int num_lines;
 }post;
 
-post* createPost(post** fisrtPost, char* username, char** caption, int num_lines);
+post* createPost(char* username, char** caption);
 
 
 

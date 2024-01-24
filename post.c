@@ -2,12 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include "post.h"
+#include "platform.h"
 #include "comment.h"
 
-post* createPost(post** firstPost, char* username, char** caption,int num_lines){
+post* createPost(char* username, char** caption){
     post* newPost = (post*)malloc(sizeof(post));
+    int num_lines;
     if(newPost!=NULL){
-        newPost->username = strdup(username);
+        char unformatted_username[25];
+        sscanf(username, "%[^_]_%d", unformatted_username, &num_lines);
+        newPost->username = strdup(unformatted_username);
         newPost->caption = (char**)malloc(sizeof(char*)*num_lines);
         for(int i=0; i<num_lines; i++){
            newPost->caption[i] = strdup(caption[i]);
@@ -15,11 +19,11 @@ post* createPost(post** firstPost, char* username, char** caption,int num_lines)
         newPost->num_lines = num_lines;
         newPost->nextPost = NULL;
         newPost->comments = NULL;
-        if(*firstPost==NULL) {
+        if(pf->posts==NULL) {
             newPost->id = 1;
-            *firstPost = newPost;
-            return *firstPost;
-        }post* tempPost = *firstPost;
+            pf->posts = newPost;
+            return pf->posts;
+        }post* tempPost = pf->posts;
         while(tempPost->nextPost!=NULL){
             tempPost = tempPost->nextPost;
         }newPost->id = tempPost->id+1;

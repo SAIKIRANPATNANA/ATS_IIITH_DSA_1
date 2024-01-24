@@ -5,8 +5,7 @@
 #include "post.h"
 #include "comment.h"
 
-int flag = 1;
-platform* createPlatform(platform* pf) {
+platform* createPlatform() {
     platform* newPlatform = (platform*)malloc(sizeof(platform));
     if(newPlatform!=NULL && pf==NULL){
         newPlatform->num_posts = 0;
@@ -14,8 +13,8 @@ platform* createPlatform(platform* pf) {
         newPlatform->posts = NULL;
         return newPlatform;
     }return NULL;
-}int addPost(platform* pf, char* username, char** caption, int num_lines){
-    post* newPost = createPost(&(pf->posts),username,caption,num_lines);
+}int addPost(char* username, char** caption){
+    post* newPost = createPost(username,caption);
     if(newPost!=NULL){
         if(pf->lastViewedPost==NULL){
             pf->lastViewedPost = newPost;
@@ -34,7 +33,7 @@ platform* createPlatform(platform* pf) {
         free(content[i]);
     }free(content);
     return;
-}int deletePost(platform *pf, int n){
+}int deletePost(int n){
     if(n<=pf->num_posts){
         post* tempPost = pf->posts;
         if(n==1){
@@ -53,7 +52,7 @@ platform* createPlatform(platform* pf) {
             return 1;
         }
     }return 0;
-}post* viewPost(platform* pf, int n){
+}post* viewPost(int n){
     if(n<=pf->num_posts){
         post* tempPost = pf->posts;
         while(tempPost!=NULL && tempPost->id!=n){
@@ -64,7 +63,7 @@ platform* createPlatform(platform* pf) {
             return tempPost;
         }
     }return NULL;
-}post* currPost(platform* pf){
+}post* currPost(){
     if(pf->lastViewedPost!=NULL){
         if(flag && pf->num_posts>1 && pf->lastViewedPost==pf->posts){
             post* tempPost = pf->posts;
@@ -73,7 +72,7 @@ platform* createPlatform(platform* pf) {
             }pf->lastViewedPost = tempPost;
         }return pf->lastViewedPost;
     }return NULL;
-}post* nextPost(platform* pf){
+}post* nextPost(){
     if(pf->lastViewedPost!=NULL){
         if(pf->lastViewedPost->id ==  1){
             return pf->lastViewedPost;
@@ -88,7 +87,7 @@ platform* createPlatform(platform* pf) {
             }
         }
     }return NULL;
-}post* previousPost(platform* pf){
+}post* previousPost(){
     if(pf->lastViewedPost!=NULL &&  pf->num_posts>=pf->lastViewedPost->id){
         if(pf->num_posts == pf->lastViewedPost->id){
             return pf->lastViewedPost;
@@ -103,18 +102,18 @@ platform* createPlatform(platform* pf) {
             }
         }
     }return NULL;
-}int addComment(platform* pf, char* username , char** content, int num_lines){
+}int addComment(char* username , char** content){
     if(pf->lastViewedPost!=NULL){
-       comment* newComment = createComment(&(pf->lastViewedPost->comments),username,content,num_lines);
+       comment* newComment = createComment(username,content);
        if(newComment!=NULL){
            pf->lastViewedPost->num_comments += 1;
            return 1;
        }
     }return 0;
-}int deleteComment(platform* pf, int n){
-    if(pf->lastViewedPost!=NULL &&  n<=pf->lastViewedPost->num_comments){
+}int deleteComment(int n){
+    if(pf->lastViewedPost!=NULL && pf->lastViewedPost->comments!=NULL && n<=pf->lastViewedPost->num_comments){
         comment* tempComment = pf->lastViewedPost->comments;
-        if(n==1){
+        if(tempComment->id == n){
             pf->lastViewedPost->comments = tempComment->nextComment;
             freeContent(tempComment->content,tempComment->num_lines);
             free(tempComment);
@@ -128,7 +127,7 @@ platform* createPlatform(platform* pf) {
             return 1;
         }
     }return 0;
-}comment* viewComments(platform* pf){
+}comment* viewComments(){
     if(pf->lastViewedPost!=NULL &&  pf->lastViewedPost->comments!=NULL){
         return pf->lastViewedPost->comments;
     }return NULL;
