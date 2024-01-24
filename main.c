@@ -119,10 +119,9 @@ int main() {
                 comment* tempComment = comments;
                 while(tempComment!=NULL){
                     printf("%s\n",tempComment->username);
-                    for(int i=0; i<tempComment->num_lines; i++){
-                        printf("- %s\n",tempComment->content[i]);
-                    }printf("\n");
-                    tempComment = tempComment->nextComment;
+                    for(int i=1; i<tempComment->num_lines; i++){
+                        printf("- %s",tempComment->content[i]);
+                    }tempComment = tempComment->nextComment;
                 }printf("View Comments is SUCCESSFUL.\n");
             }else{
                 printf("View Comments is NOT SUCCESSFUL.\n");

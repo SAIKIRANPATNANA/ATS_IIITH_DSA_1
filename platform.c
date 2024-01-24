@@ -5,6 +5,7 @@
 #include "post.h"
 #include "comment.h"
 
+int flag = 1;
 platform* createPlatform(platform* pf) {
     platform* newPlatform = (platform*)malloc(sizeof(platform));
     if(newPlatform!=NULL && pf==NULL){
@@ -55,17 +56,22 @@ platform* createPlatform(platform* pf) {
 }post* viewPost(platform* pf, int n){
     if(n<=pf->num_posts){
         post* tempPost = pf->posts;
-        if(tempPost==NULL){
-        }while(tempPost!=NULL && tempPost->id!=n){
+        while(tempPost!=NULL && tempPost->id!=n){
             tempPost = tempPost->nextPost;
         }if(tempPost!=NULL){
             pf->lastViewedPost = tempPost;
+            flag = 0;
             return tempPost;
         }
     }return NULL;
 }post* currPost(platform* pf){
     if(pf->lastViewedPost!=NULL){
-        return pf->lastViewedPost;
+        if(flag && pf->num_posts>1 && pf->lastViewedPost==pf->posts){
+            post* tempPost = pf->posts;
+            while(tempPost->nextPost!=NULL){
+                tempPost = tempPost->nextPost;
+            }pf->lastViewedPost = tempPost;
+        }return pf->lastViewedPost;
     }return NULL;
 }post* nextPost(platform* pf){
     if(pf->lastViewedPost!=NULL){
@@ -99,7 +105,7 @@ platform* createPlatform(platform* pf) {
     }return NULL;
 }int addComment(platform* pf, char* username , char** content, int num_lines){
     if(pf->lastViewedPost!=NULL){
-       comment* newComment = createComment(pf->lastViewedPost->comments,username,content,num_lines);
+       comment* newComment = createComment(&(pf->lastViewedPost->comments),username,content,num_lines);
        if(newComment!=NULL){
            pf->lastViewedPost->num_comments += 1;
            return 1;
