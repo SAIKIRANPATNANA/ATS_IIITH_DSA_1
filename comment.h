@@ -1,14 +1,17 @@
 typedef struct platform platform;
 typedef struct post post;
+typedef struct reply reply;
 
 typedef struct comment{
     int id;
     char* username;
-    char** content;
+    char* content;
     struct comment* nextComment;
-    int num_lines;
+    struct reply* replies;
+    // int num_lines;
+    int num_replies;
 }comment;
 
-comment* createComment(char* username, char** content);
+comment* createComment(char* username, char* content);
 
 
