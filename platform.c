@@ -181,7 +181,7 @@ int deletePost(int n){
             }else{
                 return 0;
             }
-        }if(tempComment->num_replies>=m){
+        }if(tempComment->num_replies>=m && tempComment->replies!=NULL){
             reply* tempReply = tempComment->replies;
             if(m==tempComment->replies->id){
                 tempComment->replies = tempComment->replies->nextReply;
